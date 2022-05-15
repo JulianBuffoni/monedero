@@ -12,12 +12,21 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo = 0;
-  private double limiteExtraccion = 0;
+  private double limiteExtraccion;
   private List<Movimiento> movimientos = new ArrayList<>();
 
   private int depositosMaximos = 3;
 
-  public void depositarDinero(double montoADepositar) { //Long method
+  Cuenta(double limiteExtraccion){
+    this.limiteExtraccion = limiteExtraccion;
+  }
+
+  public void depositarDinero(double montoADepositar) {
+  validarDeposito(montoADepositar);
+  agregarMovimiento(new Movimiento(LocalDate.now(), montoADepositar, true));
+  }
+
+  public void validarDeposito(double montoADepositar){
     if (montoADepositar <= 0) {
       throw new MontoNegativoOCeroException(montoADepositar + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -25,13 +34,16 @@ public class Cuenta {
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.depositosMaximos ) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + this.depositosMaximos + " depositos diarios");
     }
-
-    agregarMovimiento(new Movimiento(LocalDate.now(), montoADepositar, true));
   }
 
-  public void extraerDinero(double montoAExtraer) { //Long method
+  public void extraerDinero(double montoAExtraer) {
+    validarExtraccion(montoAExtraer);
+    agregarMovimiento(new Movimiento(LocalDate.now(), montoAExtraer, false));
+  }
+
+  public void validarExtraccion(double montoAExtraer){
     if (montoAExtraer <= 0) {
-      throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a ingresar debe ser un valor positivo");
+      throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a extraer debe ser un valor positivo");
     }
     if (getSaldo() - montoAExtraer < 0) {
       throw new SaldoInsuficiente("No puede sacar mas de " + getSaldo() + " $");
@@ -42,7 +54,6 @@ public class Cuenta {
       throw new MaximoExtraccionDiarioAlcanzadoException("No puede extraer mas de $ " + this.limiteExtraccion
           + " diarios, límite: " + limite);
     }
-    agregarMovimiento(new Movimiento(LocalDate.now(), montoAExtraer, false));
   }
 
   public void agregarMovimiento(Movimiento movimiento) {
