@@ -3,7 +3,7 @@ package dds.model;
 import dds.exceptions.MaximaCantidadDepositosException;
 import dds.exceptions.MaximoExtraccionDiarioException;
 import dds.exceptions.MontoNegativoOCeroException;
-import dds.exceptions.SaldoMenorException;
+import dds.exceptions.SaldoInsuficiente;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class Cuenta {
       throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a ingresar debe ser un valor positivo"); //0 no es un valor negativo, el nombre y msj de la excepción no son correctos
     }
     if (getSaldo() - montoAExtraer < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+      throw new SaldoInsuficiente("No puede sacar mas de " + getSaldo() + " $");
     }
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = this.limiteExtraccion - montoExtraidoHoy;
