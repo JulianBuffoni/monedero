@@ -30,7 +30,7 @@ public class Movimiento {
 
   public boolean fueExtraido(LocalDate fecha) {
     return isExtraccion() && esDeLaFecha(fecha);
-  } //debería usarse para getMontoExtraidoA, de Cuenta
+  }
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
