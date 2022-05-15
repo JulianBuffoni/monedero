@@ -12,7 +12,10 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo = 0;
+  private double limiteExtraccion = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
+
+  private int depositosMaximos = 3;
 
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
@@ -23,8 +26,8 @@ public class Cuenta {
       throw new MontoNegativoOCeroException(montoADepositar + ": el monto a ingresar debe ser un valor positivo");
     }
 
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3 ) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios"); //podría ponerse un atributo que determine la cantidad máxima, para poder cambiarse en caso de ser necesario
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.depositosMaximos ) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + this.depositosMaximos + " depositos diarios");
     }
 
     new Movimiento(LocalDate.now(), montoADepositar, true).agregateA(this);
@@ -38,9 +41,9 @@ public class Cuenta {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy; //podría ponerse un atributo en vez de 1000 que determine la cantidad máxima, para poder cambiarse en caso de ser necesario
+    double limite = this.limiteExtraccion - montoExtraidoHoy;
     if (montoAExtraer > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000 //podría ponerse un atributo que determine la cantidad máxima, para poder cambiarse en caso de ser necesario
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + this.limiteExtraccion
           + " diarios, límite: " + limite);
     }
     new Movimiento(LocalDate.now(), montoAExtraer, false).agregateA(this);
