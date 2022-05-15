@@ -14,14 +14,6 @@ public class Cuenta {
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
-  public Cuenta() {
-    saldo = 0;
-  } //redundante iniciar en 0
-
-  public Cuenta(double montoInicial) {
-    saldo = montoInicial;
-  } //nunca se usa
-
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
   } //no tiene sentido settar movimientos de esta manera. Deberían ir agregándose cada vez que se realicen
