@@ -1,7 +1,7 @@
 package dds.model;
 
 import dds.exceptions.MaximaCantidadDepositosException;
-import dds.exceptions.MaximoExtraccionDiarioException;
+import dds.exceptions.MaximoExtraccionDiarioAlcanzadoException;
 import dds.exceptions.MontoNegativoOCeroException;
 import dds.exceptions.SaldoInsuficiente;
 
@@ -43,7 +43,7 @@ public class Cuenta {
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = this.limiteExtraccion - montoExtraidoHoy;
     if (montoAExtraer > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + this.limiteExtraccion
+      throw new MaximoExtraccionDiarioAlcanzadoException("No puede extraer mas de $ " + this.limiteExtraccion
           + " diarios, límite: " + limite);
     }
     agregarMovimiento(new Movimiento(LocalDate.now(), montoAExtraer, false));
