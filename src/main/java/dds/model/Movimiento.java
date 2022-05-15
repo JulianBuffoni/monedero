@@ -43,17 +43,4 @@ public class Movimiento {
   public boolean isExtraccion() {
     return !esDeposito;
   }
-
-  public void agregateA(Cuenta cuenta) { //Feature Envy
-    cuenta.setSaldo(simularMovimiento(cuenta));
-    cuenta.agregarMovimiento(this);
-  }
-
-  public double simularMovimiento(Cuenta cuenta) {
-    if (esDeposito) {
-      return cuenta.getSaldo() + getMonto();
-    } else {
-      return cuenta.getSaldo() - getMonto();
-    }
-  }
 }
