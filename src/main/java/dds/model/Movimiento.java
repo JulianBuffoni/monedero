@@ -45,12 +45,12 @@ public class Movimiento {
   }
 
   public void agregateA(Cuenta cuenta) { //Feature Envy
-    cuenta.setSaldo(calcularValor(cuenta));
-    cuenta.agregarMovimiento(this); // podría pasarse el propio movimiento en vez de sus atributos
+    cuenta.setSaldo(simularMovimiento(cuenta));
+    cuenta.agregarMovimiento(this);
   }
 
-  public double calcularValor/*mal nombre*/(Cuenta cuenta) {
-    if (esDeposito) { // repetición de lógica
+  public double simularMovimiento(Cuenta cuenta) {
+    if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
     } else {
       return cuenta.getSaldo() - getMonto();
