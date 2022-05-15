@@ -46,7 +46,7 @@ public class Movimiento {
 
   public void agregateA(Cuenta cuenta) { //Feature Envy
     cuenta.setSaldo(calcularValor(cuenta));
-    cuenta.agregarMovimiento(fecha, monto, esDeposito); // podría pasarse el propio movimiento en vez de sus atributos
+    cuenta.agregarMovimiento(this); // podría pasarse el propio movimiento en vez de sus atributos
   }
 
   public double calcularValor/*mal nombre*/(Cuenta cuenta) {

@@ -46,8 +46,7 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), montoAExtraer, false).agregateA(this);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) { //podría recibirse como parámetro al movimiento, en vez de sus atributos
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
 
