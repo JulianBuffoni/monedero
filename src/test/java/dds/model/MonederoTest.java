@@ -2,7 +2,7 @@ package dds.model;
 
 import dds.exceptions.MaximaCantidadDepositosException;
 import dds.exceptions.MaximoExtraccionDiarioException;
-import dds.exceptions.MontoNegativoException;
+import dds.exceptions.MontoNegativoOCeroException;
 import dds.exceptions.SaldoMenorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,30 +22,30 @@ class MonederoTest {
 
   @Test
   void Poner() {
-    cuenta.poner(1500);
+    cuenta.depositarDinero(1500);
     assertEquals(1500, cuenta.getSaldo());
   }
 
   @Test
   void PonerMontoNegativo() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
+    assertThrows(MontoNegativoOCeroException.class, () -> cuenta.depositarDinero(-1500));
   }
 
   @Test
   void TresDepositos() {
-    cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);
+    cuenta.depositarDinero(1500);
+    cuenta.depositarDinero(456);
+    cuenta.depositarDinero(1900);
     assertEquals(3856, cuenta.getSaldo());
   }
 
   @Test
   void MasDeTresDepositos() {
-    cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);
+    cuenta.depositarDinero(1500);
+    cuenta.depositarDinero(456);
+    cuenta.depositarDinero(1900);
     assertThrows(MaximaCantidadDepositosException.class, () -> {
-      cuenta.poner(245);
+      cuenta.depositarDinero(245);
     });
   }
 
@@ -53,7 +53,7 @@ class MonederoTest {
   void ExtraerMasQueElSaldo() {
     cuenta.setSaldo(90);
     assertThrows(SaldoMenorException.class, () -> {
-      cuenta.sacar(1001);
+      cuenta.extraerDinero(1001);
     });
   }
 
@@ -61,19 +61,19 @@ class MonederoTest {
   void ExtraerMasDe1000() {
     cuenta.setSaldo(5000);
     assertThrows(MaximoExtraccionDiarioException.class, () -> {
-      cuenta.sacar(1001);
+      cuenta.extraerDinero(1001);
     });
   }
 
   @Test
   void ExtraerMontoNegativo() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
+    assertThrows(MontoNegativoOCeroException.class, () -> cuenta.extraerDinero(-500));
   }
 
   @Test
   void montoExtraidoHoy() {
-    cuenta.poner(1500);
-    cuenta.sacar(100);
+    cuenta.depositarDinero(1500);
+    cuenta.extraerDinero(100);
     assertEquals(100,cuenta.getMontoExtraidoA(LocalDate.now()));
   }
 }
