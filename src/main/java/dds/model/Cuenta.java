@@ -17,11 +17,7 @@ public class Cuenta {
 
   private int depositosMaximos = 3;
 
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
-  } //no tiene sentido settar movimientos de esta manera. Deberían ir agregándose cada vez que se realicen
-
-  public void depositarDinero(double montoADepositar) {
+  public void depositarDinero(double montoADepositar) { //Long method
     if (montoADepositar <= 0) {
       throw new MontoNegativoOCeroException(montoADepositar + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -35,7 +31,7 @@ public class Cuenta {
 
   public void extraerDinero(double montoAExtraer) { //Long method
     if (montoAExtraer <= 0) {
-      throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a ingresar debe ser un valor positivo"); //0 no es un valor negativo, el nombre y msj de la excepción no son correctos
+      throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a ingresar debe ser un valor positivo");
     }
     if (getSaldo() - montoAExtraer < 0) {
       throw new SaldoInsuficiente("No puede sacar mas de " + getSaldo() + " $");
