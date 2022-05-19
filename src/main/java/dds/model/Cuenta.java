@@ -23,20 +23,20 @@ public class Cuenta {
 
   public void depositarDinero(double montoADepositar) {
     validarDeposito(montoADepositar);
-    agregarMovimiento(new Movimiento(LocalDate.now(), montoADepositar, true));
+    agregarMovimiento(new Deposito(LocalDate.now(), montoADepositar));
   }
 
   public void validarDeposito(double montoADepositar) {
     validarMontoPositivo(montoADepositar);
 
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.depositosMaximos) {
+    if (getMovimientos().stream().filter(Movimiento::isDeposito).count() >= this.depositosMaximos) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + this.depositosMaximos + " depositos diarios");
     }
   }
 
   public void extraerDinero(double montoAExtraer) {
     validarExtraccion(montoAExtraer);
-    agregarMovimiento(new Movimiento(LocalDate.now(), montoAExtraer, false));
+    agregarMovimiento(new Extraccion(LocalDate.now(), montoAExtraer));
   }
 
   public void validarExtraccion(double montoAExtraer) {
@@ -62,15 +62,12 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
   public double simularMovimiento(Movimiento movimiento) {
-    if (movimiento.isDeposito()) {
-      return saldo + movimiento.getMonto();
-    } else {
-      return saldo - movimiento.getMonto();
-    }
+      return movimiento.calcularValor(saldo);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
+        .filter(Movimiento::isExtraccion)
         .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
