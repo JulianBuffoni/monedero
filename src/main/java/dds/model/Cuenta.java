@@ -17,21 +17,19 @@ public class Cuenta {
 
   private int depositosMaximos = 3;
 
-  Cuenta(double limiteExtraccion){
+  Cuenta(double limiteExtraccion) {
     this.limiteExtraccion = limiteExtraccion;
   }
 
   public void depositarDinero(double montoADepositar) {
-  validarDeposito(montoADepositar);
-  agregarMovimiento(new Movimiento(LocalDate.now(), montoADepositar, true));
+    validarDeposito(montoADepositar);
+    agregarMovimiento(new Movimiento(LocalDate.now(), montoADepositar, true));
   }
 
-  public void validarDeposito(double montoADepositar){
-    if (montoADepositar <= 0) {
-      throw new MontoNegativoOCeroException(montoADepositar + ": el monto a ingresar debe ser un valor positivo");
-    }
+  public void validarDeposito(double montoADepositar) {
+    validarMontoPositivo(montoADepositar);
 
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.depositosMaximos ) {
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.depositosMaximos) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + this.depositosMaximos + " depositos diarios");
     }
   }
@@ -41,10 +39,8 @@ public class Cuenta {
     agregarMovimiento(new Movimiento(LocalDate.now(), montoAExtraer, false));
   }
 
-  public void validarExtraccion(double montoAExtraer){
-    if (montoAExtraer <= 0) {
-      throw new MontoNegativoOCeroException(montoAExtraer + ": el monto a extraer debe ser un valor positivo");
-    }
+  public void validarExtraccion(double montoAExtraer) {
+    validarMontoPositivo(montoAExtraer);
     if (getSaldo() - montoAExtraer < 0) {
       throw new SaldoInsuficiente("No puede sacar mas de " + getSaldo() + " $");
     }
@@ -56,6 +52,11 @@ public class Cuenta {
     }
   }
 
+  public void validarMontoPositivo(double monto){
+    if(monto <=0) {
+      throw new MontoNegativoOCeroException(monto + ": el monto a extraer debe ser un valor positivo");
+    }
+  }
   public void agregarMovimiento(Movimiento movimiento) {
     setSaldo(simularMovimiento(movimiento));
     movimientos.add(movimiento);
